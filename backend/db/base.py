@@ -1,8 +1,9 @@
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlmodel import SQLModel
+from core.config import settings
 
-
-@as_declarative()
-class Base:
+class Base(SQLModel):
+    __table_args__: object = {"schema": settings.DB_SCHEMA}
     __name__: str
     # Generates table name based on class name
     @declared_attr

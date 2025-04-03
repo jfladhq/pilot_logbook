@@ -1,7 +1,3 @@
-from sqlalchemy.sql import text
-from sqlalchemy.dialects import mysql
-
-
 def queryset_to_dict(rows):
     return [dict(r) for r in rows]
 

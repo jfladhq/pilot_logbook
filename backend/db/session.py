@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlmodel import MetaData, create_engine, Session
+from sqlalchemy.orm import sessionmaker
 from core.config import settings
 
 engine = create_engine(
@@ -9,4 +9,6 @@ engine = create_engine(
     max_overflow=5,
     # pool_recycle=3600,
 )
-session: Session = sessionmaker(autocommit=False, autoflush=False, bind=engine, future=True)
+session: Session = sessionmaker(class_=Session, autocommit=False, autoflush=False, bind=engine, future=True)
+metadata = MetaData(schema=settings.DB_SCHEMA)
+metadata.reflect(bind=engine)

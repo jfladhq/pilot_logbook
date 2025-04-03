@@ -1,7 +1,7 @@
 from db.session import session
 from fastapi import HTTPException, Depends, status
 from fastapi.security import SecurityScopes
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
 
 def get_db():

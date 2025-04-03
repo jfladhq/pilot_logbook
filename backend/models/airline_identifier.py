@@ -1,13 +1,14 @@
-from sqlalchemy import (
+from typing import Optional
+from sqlmodel import (
     Column,
+    Field,
     Integer,
     String,
 )
 from db.base import Base
 
-
-class AirlineIdentifier(Base):
-    idAirlineIdentifier = Column(Integer, primary_key=True)
-    name = Column(String(45), nullable=False)
-    letterCode = Column(String(2), nullable=False)
-    accountCode = Column(Integer)
+class AirlineIdentifier(Base,table=True):
+    idAirlineIdentifier: int | None = Field(default=None, primary_key=True)
+    name: str = Column(String(45), nullable=False)
+    letterCode: str = Column(String(2), nullable=False)
+    accountCode: int = Column(Integer)
