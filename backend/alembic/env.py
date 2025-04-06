@@ -1,7 +1,8 @@
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
+from sqlalchemy.ext.asyncio import create_async_engine
 from models import *
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, create_engine
 from db.base import Base
 from core.config import settings
 from alembic import context
@@ -21,13 +22,14 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 #target_metadata = Base.metadata
 target_metadata = SQLModel.metadata
+print ("target_metadata", target_metadata)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URI)
-url = config.get_main_option("sqlalchemy.url")
+#config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URI)
+#url = config.get_main_option("sqlalchemy.url")
 
 
 def run_migrations_offline():
@@ -42,7 +44,7 @@ def run_migrations_offline():
     script output.
 
     """
-
+    url = settings.SQLALCHEMY_DATABASE_URI
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -55,6 +57,12 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
+def do_run_migrations(connection):
+    context.configure(connection=connection, target_metadata=target_metadata)
+
+    with context.begin_transaction():
+        context.run_migrations()
+
 
 def run_migrations_online():
     """Run migrations in 'online' mode.
@@ -63,10 +71,19 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section),
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
+    connectable = create_async_engine(
+        settings.SQLALCHEMY_DATABASE_URI,
+        echo=True,
+        future=True,
+        connect_args={
+            "server_settings": {"search_path": settings.DB_SCHEMA}
+        },
+        #poolclass=pool.NullPool
     )
 
     with connectable.connect() as connection:
