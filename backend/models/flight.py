@@ -11,6 +11,7 @@ from sqlmodel import (
     Relationship,
     #SQLModel
 )
+from sqlalchemy.orm import RelationshipProperty
 from models.airline_identifier import AirlineIdentifier
 from models.aircraft_category import AircraftCategory
 from models.pilot_type import PilotType
@@ -49,19 +50,46 @@ class Flight(Base, table=True):
     user_id: int = Field(default=None, foreign_key="user.id")
 
     airline_identifier: AirlineIdentifier = Relationship(
-        sa_relationship_kwargs={"primaryjoin": "airlineidentifier_id==airlineidentifier.id","lazy":"joined"}
+        sa_relationship=RelationshipProperty(
+            "AirlineIdentifier", 
+            primaryjoin="foreign(Flight.airlineidentifier_id) == AirlineIdentifier.id", 
+            uselist=True
+        )
     )
+        #sa_relationship_args=airlineidentifier_id== AirlineIdentifier.id)
+        #link_model=AirlineIdentifier,
+        #sa_relationship_kwargs={"primaryjoin": "airlineidentifier_id==airlineidentifier.id","lazy":"joined"}
+        #sa_relationship_kwargs={"primaryjoin": "flight.airlineidentifier_id==airlineidentifier.id","lazy":"joined"}
+    #)
     aircraft_category: AircraftCategory = Relationship(
-        sa_relationship_kwargs={"primaryjoin": "aircraftcategory_id==aircraftcategory.id","lazy":"joined"}
+        sa_relationship=RelationshipProperty(
+            "AircraftCategory", 
+            primaryjoin="foreign(Flight.aircraftcategory_id) == AircraftCategory.id", 
+            uselist=True
+        )
+
+        #sa_relationship_args=(aircraftcategory_id==AircraftCategory.id)
     )
+        #sa_relationship_kwargs={"primaryjoin": "aircraftcategory_id=aircraftcategory.id","lazy":"joined"}
+    #)
     # aircraft_category: AircraftCategory = Relationship(
     #      sa_relationship_kwargs={"primaryjoin": "Flight.AircraftCategory_id=AircraftCategory.id","lazy":"joined"}
     # )
     pilot_type: PilotType = Relationship(
-        sa_relationship_kwargs={"primaryjoin": "pilottype_id==pilottype.id","lazy":"joined"}
+        sa_relationship=RelationshipProperty(
+            "PilotType", 
+            primaryjoin="foreign(Flight.pilottype_id) == PilotType.id", 
+            uselist=True
+        ),
+        #sa_relationship_kwargs={"primaryjoin": "flight.pilottype_id==pilottype.id","lazy":"joined"}
     )
     user: User = Relationship(
-        sa_relationship_kwargs={"primaryjoin": "user_id==user.id","lazy":"joined"}
+        sa_relationship=RelationshipProperty(
+            "User", 
+            primaryjoin="foreign(Flight.user_id) == User.id", 
+            uselist=True
+        ),
+        #sa_relationship_kwargs={"primaryjoin": "flight.user_id==user.id","lazy":"joined"}
     )
     # user: User = Relationship(
     #     sa_relationship_kwargs={"primaryjoin":"Flight.User_id=User.id","lazy":"joined"}

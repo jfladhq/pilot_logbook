@@ -10,7 +10,7 @@ import logging
 import sys
 import uvicorn
 
-app = FastAPI(title=settings.PROJECT_NAME)
+app = FastAPI(title=settings.PROJECT_NAME,debug=True)
 
 if not settings.DEV: 
     app.redoc_url = None

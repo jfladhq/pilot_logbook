@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "Chrome",
-      "type": "pwa-chrome",
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/frontend/src",
@@ -14,7 +14,7 @@
     },
     {
       "name": "Python: FastAPI",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "uvicorn",
       "args": ["main:app", "--port", "9000", "--reload"],

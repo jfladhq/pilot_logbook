@@ -7,12 +7,14 @@ from core.config import settings
 #metadata = SQLModel.metadata.schema=settings.DB_SCHEMA
 
 #@as_declarative()
+meta = MetaData(schema=settings.DB_SCHEMA)
 class Base(SQLModel):
-    __table_args__: object = {"schema": settings.DB_SCHEMA}
+    #__table_args__: object = {"schema": settings.DB_SCHEMA}
     id: int = Field(default=None, primary_key=True)
-    #__name__: str
+    metadata = meta
+    __name__: str
     # Generates table name based on class name
-    #@declared_attr
-    #def __tablename__(cls) -> str:
-    #    return cls.__name__.lower()
+    @declared_attr
+    def __tablename__(cls) -> str:
+        return cls.__name__.lower()
     #metadata: MetaData = metadata

@@ -11,7 +11,7 @@ import schemas as schemas
 import models as models
 
 router = CRUDRouter(
-    schema=schemas.Flight,
+    schema=models.Flight,
     db_model=models.Flight,
     db=get_db,
     prefix="/flight",
@@ -20,7 +20,7 @@ router = CRUDRouter(
 )
 
 #  = list[File(...)]
-@router.post("/skywest-import/", response_model=schemas.Flight)
+@router.post("/skywest-import/", response_model=models.Flight)
 def skywest_import_flight(
     airline: str, name: str, files: list[UploadFile], db: Session = Depends(get_db)
 ):
