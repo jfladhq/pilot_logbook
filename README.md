@@ -1,4 +1,5 @@
 [![CodeQL](https://github.com/jfladhq/pilot_logbook/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jfladhq/pilot_logbook/actions/workflows/codeql-analysis.yml)
+
 Update 4/28/2024 - Server is currently down due to looking for alternative database hosting.
 
 # Pilot Logbook
