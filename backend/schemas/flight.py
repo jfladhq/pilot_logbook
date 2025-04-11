@@ -5,7 +5,7 @@ from schemas.pilot_type import PilotType
 
 
 class Flight(Base):
-    idFlight: int | None
+    id: int | None
     date: date
     aircraftType: str
     aircraftIdentity: str
@@ -24,9 +24,9 @@ class Flight(Base):
     initialOperatingExperience: bool | None
     crewMemberName: str
     flightNumber: str
-    AirlineIdentifier_idAirlineIdentifier: int
-    AircraftCategory_idAircraftCategory: int
-    PilotType_idPilotType: int
+    AirlineIdentifier_id: int
+    AircraftCategory_id: int
+    PilotType_id: int
 
     aircraft_category: AircraftCategory
     pilot_type: PilotType

@@ -2,7 +2,7 @@ from .base import Base
 
 
 class User(Base):
-    idUser: int
+    id: int
     admin: bool
     username: str
     firstName: str

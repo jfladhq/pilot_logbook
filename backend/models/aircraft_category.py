@@ -1,12 +1,12 @@
-from sqlalchemy import (
+from sqlmodel import (
     Column,
-    Integer,
     String,
+    Field,
+    #SQLModel
 )
 from db.base import Base
 
-
-class AircraftCategory(Base):
-    idAircraftCategory = Column(Integer, primary_key=True)
-    shortName = Column(String(45), nullable=False)
-    name = Column(String(45), nullable=False)
+class AircraftCategory(Base, table=True):
+    #id: int | None = Field(default=None, primary_key=True)
+    shortName: str = Field(sa_column=Column(String(45)))
+    name: str = Field(sa_column=Column(String(45)))
