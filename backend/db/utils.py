@@ -1,7 +1,6 @@
 def queryset_to_dict(rows):
     return [dict(r) for r in rows]
 
-
 def queryset_to_list(rows):
     data_list = []
     for r in rows:

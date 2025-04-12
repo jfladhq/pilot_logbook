@@ -4,13 +4,12 @@ import schemas as schemas
 import models as models
 
 router = CRUDRouter(
-    schema=schemas.AirlineIdentifier,
-    create_schema=schemas.AirlineIdentifier,
-    update_schema=schemas.AirlineIdentifier,
-    db_model=models.AirlineIdentifier,
+    schema=schemas.Aircraft,
+    create_schema=schemas.Aircraft,
+    db_model=models.Aircraft,
     db=get_db,
-    prefix="/airline-identifier",
-    tags=["airline-identifier"],
+    prefix="/aircraft",
+    tags=["aircraft"],
     delete_all_route=False,
     get_one_route=False,
 )

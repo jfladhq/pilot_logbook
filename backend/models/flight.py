@@ -7,8 +7,12 @@ from sqlmodel import (
     Boolean,
     DECIMAL,
     TIMESTAMP,
+    ForeignKey,
+    Table,
+    UniqueConstraint,
     func,
     Relationship,
+    Integer
     #SQLModel
 )
 from sqlalchemy.orm import RelationshipProperty
@@ -20,35 +24,66 @@ from models import *
 from db.base import Base
 
 class Flight(Base, table=True):
-    #id: int | None = Field(default=None, primary_key=True)
     date: date
-    aircraftType: str = Field(sa_column=Column(VARCHAR(3), nullable=False))
     aircraftIdentity: str = Field(sa_column=Column(VARCHAR(9), nullable=False))
-    fromAirport: str = Field(sa_column=Column(VARCHAR(3), nullable=False))
-    toAirport: str = Field(sa_column=Column(VARCHAR(3), nullable=False))
     departure: time
     arrival: time
+    totalFlightDuration: float = Field(sa_column=Column(DECIMAL(6, 2), nullable=False))
     dayLanding: int | None
     nightLanding: int | None
     actualInstrument: float | None = Field(sa_column=Column(DECIMAL(6, 2)))
     simulatedInstrumentUnderHood: float | None = Field(sa_column=Column(DECIMAL(6, 2)))
+    atd: float | None = Field(sa_column=Column(DECIMAL(6,2), comment="UND"))
+    atdInstrument: float | None = Field(sa_column=Column(DECIMAL(6,2), comment="UND"))
     hold: int | None
-    simulator: float | None = Field(sa_column=Column(DECIMAL(6, 2)))
+    fullFlightSim: float | None = Field(sa_column=Column(DECIMAL(6,2)))
+    groundTrainer: float | None = Field(sa_column=Column(DECIMAL(6,2)))
+    lineCheck: bool = Field(Boolean, default=False)
     crossCountryTime: float | None = Field(sa_column=Column(DECIMAL(6, 2)))
-    totalFlightDuration: float = Field(sa_column=Column(DECIMAL(6, 2), nullable=False))
     initialOperatingExperience: bool | None = Field(sa_column=Column(Boolean))
+    remarks: str | None = Field(sa_column=Column(VARCHAR(255)))
+    approaches: int | None
     crewMemberName: str = Field(sa_column=Column(VARCHAR(100), nullable=False))
     flightNumber: str = Field(sa_column=Column(VARCHAR(4), nullable=False))
+    fileName: str = Field(VARCHAR(50))
+    course: str = Field(sa_column=Column(VARCHAR(4), comment="UND"))
+    lesson: str = Field(sa_column=Column(VARCHAR(10), comment="UND"))
+    status: str = Field(sa_column=Column(VARCHAR(3), comment="UND"))
+    instructor: str = Field(sa_column=Column(VARCHAR(10), comment="UND"))
+    oral: float = Field(sa_column=Column(DECIMAL(6,2), comment="UND"))
+    dtl: Optional[int] = Field(sa_column=Column(Integer, comment="Daytime Landings UND"))
+    ntl: Optional[int] = Field(sa_column=Column(Integer, comment="Nighttime Landings UND"))
     timestamp: Optional[datetime] = Field(
         default=func.now(),
         sa_type=TIMESTAMP(timezone=True),
         sa_column_kwargs={"server_default": func.now(), "onupdate": func.now()}
     )
+    to_airport_id: int = Field(foreign_key="airport.id")
+    from_airport_id: int = Field(foreign_key="airport.id")
+    aircraft_id: int = Field(foreign_key="aircraft.id")
     airlineidentifier_id: int = Field(default=None,foreign_key="airlineidentifier.id")
     aircraftcategory_id: int = Field(default=None,foreign_key="aircraftcategory.id")
     pilottype_id: int = Field(default=None, foreign_key="pilottype.id")
     user_id: int = Field(default=None, foreign_key="user.id")
-
+    __table_args__ = (UniqueConstraint(date, departure, arrival, totalFlightDuration),)
+    
+    to_airport: Airport = Relationship(
+        sa_relationship=RelationshipProperty(
+            "Airport",
+            foreign_keys=to_airport_id
+            )
+        )
+    from_airport: Airport = Relationship(sa_relationship=RelationshipProperty(
+        "Airport",
+        foreign_keys=from_airport_id
+        )
+    )
+    aircraft: Aircraft = Relationship(
+        sa_relationship=RelationshipProperty(
+            "Aircraft",
+            foreign_keys=aircraft_id
+        )
+    )
     airline_identifier: AirlineIdentifier = Relationship(
         sa_relationship=RelationshipProperty(
             "AirlineIdentifier", 
@@ -56,32 +91,19 @@ class Flight(Base, table=True):
             uselist=True
         )
     )
-        #sa_relationship_args=airlineidentifier_id== AirlineIdentifier.id)
-        #link_model=AirlineIdentifier,
-        #sa_relationship_kwargs={"primaryjoin": "airlineidentifier_id==airlineidentifier.id","lazy":"joined"}
-        #sa_relationship_kwargs={"primaryjoin": "flight.airlineidentifier_id==airlineidentifier.id","lazy":"joined"}
-    #)
     aircraft_category: AircraftCategory = Relationship(
         sa_relationship=RelationshipProperty(
             "AircraftCategory", 
             primaryjoin="foreign(Flight.aircraftcategory_id) == AircraftCategory.id", 
             uselist=True
         )
-
-        #sa_relationship_args=(aircraftcategory_id==AircraftCategory.id)
     )
-        #sa_relationship_kwargs={"primaryjoin": "aircraftcategory_id=aircraftcategory.id","lazy":"joined"}
-    #)
-    # aircraft_category: AircraftCategory = Relationship(
-    #      sa_relationship_kwargs={"primaryjoin": "Flight.AircraftCategory_id=AircraftCategory.id","lazy":"joined"}
-    # )
     pilot_type: PilotType = Relationship(
         sa_relationship=RelationshipProperty(
             "PilotType", 
             primaryjoin="foreign(Flight.pilottype_id) == PilotType.id", 
             uselist=True
         ),
-        #sa_relationship_kwargs={"primaryjoin": "flight.pilottype_id==pilottype.id","lazy":"joined"}
     )
     user: User = Relationship(
         sa_relationship=RelationshipProperty(
@@ -89,8 +111,29 @@ class Flight(Base, table=True):
             primaryjoin="foreign(Flight.user_id) == User.id", 
             uselist=True
         ),
-        #sa_relationship_kwargs={"primaryjoin": "flight.user_id==user.id","lazy":"joined"}
     )
-    # user: User = Relationship(
-    #     sa_relationship_kwargs={"primaryjoin":"Flight.User_id=User.id","lazy":"joined"}
-    # )
+    to_airports: Optional[list[Airport]] = Relationship(
+        sa_relationship=RelationshipProperty(
+            "Airport",
+            secondary="Flight_Airport",
+            #relationship("Airport", secondary="Flight_Airport", lazy="joined")
+        )
+    )
+
+
+Flight_Airport = Table(
+    "Flight_Airport",
+    Base.metadata,
+    Column(
+        "flight_id",
+        Integer,
+        ForeignKey("Flight.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column(
+        "airport_id",
+        Integer,
+        ForeignKey("Airport.id"),
+        nullable=False
+    )
+)
