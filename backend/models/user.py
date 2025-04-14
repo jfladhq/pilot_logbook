@@ -3,7 +3,7 @@ from db.base import Base
 
 class User(Base, table=True):
     #id: int | None = Field(default=None, primary_key=True)
-    admin: bool = Field(sa_column=Column(Boolean, nullable=False, default=False))
+    admin: bool = Field(sa_column=Column(Boolean, default=False))
     username: str = Field(sa_column=Column(String(100), nullable=False, unique=True))
     email: str = Field(sa_column=Column(VARCHAR(100), nullable=False, unique=True))
     firstName: str = Field(sa_column=Column(String(100), nullable=False))

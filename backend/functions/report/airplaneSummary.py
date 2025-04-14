@@ -54,9 +54,9 @@ def AirplaneSummaryPDF(db, start=None, end=None, **kwargs):
         p.shortName,
         CAST(SUM(f.totalFlightDuration) as CHAR(8))
       FROM 
-        Flight f
-      INNER JOIN Aircraft a on a.id = f.Aircraft_id
-      INNER JOIN PilotType p on p.id = f.PilotType_id
+        flight f
+      INNER JOIN aircraft a on a.id = f.aircraft_id
+      INNER JOIN pilottype p on p.id = f.pilotType_id
       GROUP BY `name`, `shortName`;
       '''
     )
