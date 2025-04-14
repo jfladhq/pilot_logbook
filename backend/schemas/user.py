@@ -5,6 +5,7 @@ class User(Base):
     id: int
     admin: bool
     username: str
+    email: str
     firstName: str
     lastName: str
     resetPassword: bool
@@ -28,3 +29,4 @@ class NewUser(Base):
     firstName: str
     lastName: str
     password: str
+    email: str

@@ -62,8 +62,9 @@ const Login = () => {
       formData.append('rememberMe', rememberMe);
       axios.post(`/token/`, formData)
           .then((response) => {
+            console.log(response);
             if (response.data.access_token) {
-              setToken(response.data.access_token, response.data.user);
+              setToken(response.data.access_token, JSON.stringify(response.data.user));
               setUsername('');
               setPassword('');
               navigate('/home');

@@ -12,7 +12,7 @@ export const fetchToken = () => {
 };
 
 export const fetchUser = () => {
-  return localStorage.getItem('user');
+  return JSON.parse(localStorage.getItem('user'));
 };
 
 /**

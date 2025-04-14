@@ -1,9 +1,11 @@
+from sqlmodel import text
 from dependencies import get_db
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
 from sqlalchemy.sql.expression import select, insert
 from sqlalchemy.orm import Session
 from db.utils import queryset_to_list, queryset_to_dict
 from datetime import datetime
+from core.config import settings
 import pandas as pd
 import models as models
 
@@ -210,8 +212,8 @@ def skywest(
     name: str = Body(...), db: Session = Depends(get_db)
 ):
     message_list = []
-    airport_list = queryset_to_list(db.execute("SELECT id, code FROM Airport"))
-    file_list = queryset_to_list(db.execute('SELECT DISTINCT fileName FROM Flight'))
+    airport_list = queryset_to_list(db.execute(select(models.Airport.id, models.Airport.code)).all())
+    file_list = queryset_to_list(db.execute(select(models.Flight.fileName)).unique().all())
     aircraft_ids = db.execute(
         select(models.Aircraft.id, models.Aircraft.shortName)
     ).all()
@@ -248,15 +250,21 @@ def skywest(
             if toAirport in [x[1] for x in airport_list]:
                 to_Airport_id = [x[0] for x in airport_list if x[1] == toAirport][0]
             else:
-                result = db.execute(insert(models.Airport).values(code=toAirport))
-                to_Airport_id = result.lastrowid
+                newAirport = models.Airport(code=toAirport,name=toAirport,city="",state="")
+                result = db.add(newAirport)
+                db.commit()
+                db.refresh(newAirport)
+                to_Airport_id = newAirport.id
                 airport_list.append((to_Airport_id, toAirport))
                 message_list.append([toAirport + " was added to Airport table!", "success"])
             if fromAirport in [x[1] for x in airport_list]:
                 from_Airport_id = [x[0] for x in airport_list if x[1] == fromAirport][0]
             else:
-                result = db.execute(insert(models.Airport).values(code=fromAirport))
-                from_Airport_id = result.lastrowid
+                newAirport = models.Airport(code=fromAirport,name=fromAirport,city="",state="")
+                result = db.add(newAirport)
+                db.commit()
+                db.refresh(newAirport)
+                from_Airport_id = newAirport.id
                 airport_list.append((from_Airport_id, fromAirport))
                 message_list.append([fromAirport + " was added to Airport table!", "success"])
             block = row["Block"]
@@ -275,8 +283,11 @@ def skywest(
                 if shortName == aircraft_type:
                     aircraft_id = id
             if not aircraft_id:
-                result = db.execute(insert(models.Aircraft).values(shortName=aircraft_type))
-                aircraft_id = result.lastrowid
+                newAircraft = models.Aircraft(shortName=aircraft_type,name=aircraft_type,brand="",model="")
+                result = db.add(newAircraft)
+                db.commit()
+                db.refresh(newAircraft)
+                aircraft_id = newAircraft.id
                 aircraft_ids.append((aircraft_id, aircraft_type))
                 message_list.append([aircraft_type + " was added to Aircraft table!", 'success'])
 
@@ -291,19 +302,20 @@ def skywest(
                     "crewMemberName": crewMemberName,
                     "flightNumber": flightNumber,
                     "fileName": file.filename,
-                    "to_Airport_id": to_Airport_id,
-                    "from_Airport_id": from_Airport_id,
-                    "Aircraft_id": aircraft_id,
-                    "AircraftCategory_id": aircraft_category_id,
-                    "AirlineIdentifier_id": airline_identifier_id,
-                    "PilotType_id": pilot_type_id,
-                    "User_id": User_id,
+                    "to_airport_id": to_Airport_id,
+                    "from_airport_id": from_Airport_id,
+                    "aircraft_id": aircraft_id,
+                    "aircraftcategory_id": aircraft_category_id,
+                    "airlineidentifier_id": airline_identifier_id,
+                    "pilottype_id": pilot_type_id,
+                    "user_id": User_id,
                 }
             )
         if data_list:
             print(data_list)
             try:
-                db.execute(insert(models.Flight).values(data_list).prefix_with('IGNORE'))
+                #db.execute(insert(models.Flight).values(data_list).suffix('IGNORE', dialect="postgresql"))
+                db.execute(insert(models.Flight).values(data_list))
                 db.commit()
                 message_list.append([file.filename + " Uploaded Successfully!", 'success'])
             except Exception as err:

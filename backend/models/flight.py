@@ -51,7 +51,7 @@ class Flight(Base, table=True):
     remarks: str | None = Field(sa_column=Column(VARCHAR(255)))
     approaches: int | None
     crewMemberName: str = Field(sa_column=Column(VARCHAR(100), nullable=False))
-    flightNumber: str = Field(sa_column=Column(VARCHAR(4), nullable=False))
+    flightNumber: str = Field(sa_column=Column(VARCHAR(6), nullable=False))
     fileName: str = Field(VARCHAR(50))
     course: str = Field(sa_column=Column(VARCHAR(4), comment="UND"))
     lesson: str = Field(sa_column=Column(VARCHAR(10), comment="UND"))
@@ -75,52 +75,57 @@ class Flight(Base, table=True):
     __table_args__ = (UniqueConstraint("date", "departure", "arrival", "totalFlightDuration"),)
     
     to_airport: Airport = Relationship(
-        sa_relationship=RelationshipProperty(
-            "Airport",
-            primaryjoin="foreign(Flight.to_airport_id) == Airport.id",
-            uselist=True
-        )
+        # sa_relationship=RelationshipProperty(
+        #     "Airport",
+        #     primaryjoin="foreign(Flight.to_airport_id) == Airport.id",
+        #     uselist=False
+        # )
+        #link_model=Airport
+        back_populates="flights1",
+        useList=True
     )
     from_airport: Airport = Relationship(
-        sa_relationship=RelationshipProperty(
-            "Airport",
-            primaryjoin="foreign(Flight.from_airport_id) == Airport.id",
-            uselist=True
-        )
+        # sa_relationship=RelationshipProperty(
+        #     "Airport",
+        #     primaryjoin="foreign(Flight.from_airport_id) == Airport.id",
+        #     uselist=False
+        # )
+        back_populates="flights2",
+        useList=True
     )
     aircraft: Aircraft = Relationship(
         sa_relationship=RelationshipProperty(
             "Aircraft",
             primaryjoin="foreign(Flight.aircraft_id) == Aircraft.id",
-            uselist=True
+            uselist=False
         )
     )
     airline_identifier: AirlineIdentifier = Relationship(
         sa_relationship=RelationshipProperty(
             "AirlineIdentifier", 
             primaryjoin="foreign(Flight.airlineidentifier_id) == AirlineIdentifier.id", 
-            uselist=True
+            uselist=False
         )
     )
     aircraft_category: AircraftCategory = Relationship(
         sa_relationship=RelationshipProperty(
             "AircraftCategory", 
             primaryjoin="foreign(Flight.aircraftcategory_id) == AircraftCategory.id", 
-            uselist=True
+            uselist=False
         )
     )
     pilot_type: PilotType = Relationship(
         sa_relationship=RelationshipProperty(
             "PilotType", 
             primaryjoin="foreign(Flight.pilottype_id) == PilotType.id", 
-            uselist=True
+            uselist=False
         ),
     )
     user: User = Relationship(
         sa_relationship=RelationshipProperty(
             "User", 
             primaryjoin="foreign(Flight.user_id) == User.id", 
-            uselist=True
+            uselist=False
         ),
     )
     to_airports: list[Airport] | None = Relationship(
