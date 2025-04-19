@@ -4,14 +4,13 @@ from sqlalchemy import insert
 from core.security import get_password_hash, validate_password, get_user
 from dependencies import get_db
 import models
-import schemas
-
+from src.user.schemas import NewUser
 router = APIRouter(
     tags=["register"],
 )
 
 @router.post('/register')
-async def register(newUser: schemas.NewUser, db=Depends(get_db)):
+async def register(newUser: NewUser, db=Depends(get_db)):
   user = get_user(db, username=newUser.username)
   if user:
     return ['error', "Username already exists!"]

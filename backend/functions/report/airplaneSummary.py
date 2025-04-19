@@ -8,6 +8,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Spacer
 
 from fastapi.responses import Response
+from sqlalchemy import text
 
 from db.utils import queryset_to_list
 def Header(canvas, doc, start, end):
@@ -47,19 +48,19 @@ def AirplaneSummaryPDF(db, start=None, end=None, **kwargs):
     ]
   ]
   summary_top_list += queryset_to_list(
-    db.execute(
+    db.execute(text(
       '''
       SELECT 
-        a.name,
-        p.shortName,
-        CAST(SUM(f.totalFlightDuration) as CHAR(8))
+      a.name,
+      p."shortName",
+      CAST(SUM(f."totalFlightDuration") as CHAR(8))
       FROM 
-        flight f
+      flight f
       INNER JOIN aircraft a on a.id = f.aircraft_id
       INNER JOIN pilottype p on p.id = f.pilotType_id
-      GROUP BY `name`, `shortName`;
+      GROUP BY a.name, p."shortName";
       '''
-    )
+    ))
   )
   print(summary_top_list)
   elements = []

@@ -6,13 +6,12 @@ from fastapi import Body, Depends
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
 import schemas as schemas
-import models as models
-
+from models.report import Report
 
 router = CRUDRouter(
     schema=schemas.Report,
     create_schema=schemas.Report,
-    db_model=models.Report,
+    db_model=Report,
     db=get_db,
     prefix="/report",
     tags=["report"],

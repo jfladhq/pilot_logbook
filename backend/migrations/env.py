@@ -10,10 +10,10 @@ from db.base import Base
 from models import (
     AircraftCategory,
     PilotType,
-    Flight,
     AirlineIdentifier,
-    User
 )
+from src.flight.models import Flight
+from src.user.models import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

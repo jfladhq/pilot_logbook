@@ -17,6 +17,10 @@ class SQLModelBase(SQLModel):
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
     #metadata: MetaData = metadata
+    class Config:
+        from_attributes = True
+        #orm_mode = True
+
 
 class Base(SQLModelBase):
-    id: int = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)

@@ -60,16 +60,16 @@ const FlightTable = () => {
       deleteMutation.mutate(id);
     }
   };
-  // const onDeleteToggle = (e) => {
-  //   e.stopPropagation();
-  //   setOpenDelete(true);
-  // };
-  // const onEditClick = (e) => {
-  //   console.log('OPEN EDIT', openEdit);
-  //   setOpenEdit(true);
-  //   // e.stopPropagation();
-  //   console.log('OPEN EDIT 2', openEdit);
-  // };
+  const onDeleteToggle = (e) => {
+    e.stopPropagation();
+    setOpenDelete(true);
+  };
+  const onEditClick = (e) => {
+    console.log('OPEN EDIT', openEdit);
+    setOpenEdit(true);
+    // e.stopPropagation();
+    console.log('OPEN EDIT 2', openEdit);
+  };
 
   // const onSelectClick = async (selection) => {
   //   let result = [];
@@ -126,9 +126,9 @@ const FlightTable = () => {
   //   console.log('EDITDATA', editData);
   // };
 
-  // const onClearClick = () => {
-  //   setEditData({});
-  // };
+  const onClearClick = () => {
+    setEditData({});
+  };
 
   const onAddClick = () => {
     setEditData({});
@@ -240,7 +240,6 @@ const FlightTable = () => {
       width: 150,
       renderCell: (params) => {
         let newCodes = '';
-        console.log(params.row.to_airports);
         for (let index = 0; index < params.row.to_airports.length; index++) {
           const element = params.row.to_airports[index];
           newCodes += element.code;
@@ -358,13 +357,13 @@ const FlightTable = () => {
           className='flight-table-bg'>
           <center><h1>Flight Table</h1></center>
           <Button variant="contained" color="primary" onClick={onAddClick}>Add</Button>
-          {/* <Button variant="contained" color="success" onClick={onEditClick}
+          <Button variant="contained" color="success" onClick={onEditClick}
             disabled={Object.keys(editData).length === 0}>Edit</Button>
           <Button variant="contained" color="error" onClick={onDeleteToggle}
             disabled={Object.keys(editData).length === 0}>Delete</Button>
           <Button variant="contained" color="secondary"
             onClick={onClearClick}
-            disabled={Object.keys(editData).length === 0}>Clear Selected</Button> */}
+            disabled={Object.keys(editData).length === 0}>Clear Selected</Button>
           {isLoading === false ?
           <Table
             rows={rows}

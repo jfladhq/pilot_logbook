@@ -2,16 +2,21 @@ from datetime import timedelta
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy import update, insert
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import select
 from core.security import ACCESS_TOKEN_EXPIRE_MINUTES, authenticate, create_access_token, get_user, get_password_hash, validate_password, verify_password
 from dependencies import get_db
-import models
-import schemas
+from src.user.models import User as UserModel
+from src.user.schemas import Token, User
 
 router = APIRouter(
     tags=["login"],
 )
 
-@router.post('/token', response_model=schemas.Token)
+@router.get('/me', response_model=User)
+async def get_current_user(db=Depends(get_db)):
+    return db.execute(select(UserModel)).scalars().all()
+
+@router.post('/token', response_model=Token)
 async def login(rememberMe: bool | None = Body(None), changed_password: str | None = Body(None), form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db)):
   username = form_data.username
   password = form_data.password

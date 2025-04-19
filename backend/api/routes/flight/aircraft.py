@@ -1,12 +1,11 @@
 from dependencies import get_db
 from fastapi_crudrouter import SQLAlchemyCRUDRouter as CRUDRouter
 import schemas as schemas
-import models as models
-
+from models.aircraft import Aircraft
 router = CRUDRouter(
     schema=schemas.Aircraft,
     create_schema=schemas.Aircraft,
-    db_model=models.Aircraft,
+    db_model=Aircraft,
     db=get_db,
     prefix="/aircraft",
     tags=["aircraft"],

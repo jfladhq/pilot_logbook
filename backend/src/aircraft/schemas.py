@@ -1,7 +1,8 @@
 from db.base import Base
 
-class PilotType(Base):
+class Aircraft(Base):
     id: int
     shortName: str
     name: str
-    pic: bool | None
+    brand: str | None
+    model: str | None

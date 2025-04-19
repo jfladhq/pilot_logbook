@@ -4,8 +4,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 import re
-from models.user import User as user_model
-from schemas import TokenData
+from src.user.models import User as user_model
+from src.user.schemas import TokenData
 from sqlalchemy import select
 from pydantic import ValidationError
 
