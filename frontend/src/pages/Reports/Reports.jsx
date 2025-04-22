@@ -89,7 +89,7 @@ const Reports = () => {
       // file.url = URL.createObjectURL(file.blob);
       const contentDis = response.headers['content-disposition'];
       if (contentDis) {
-        file.name = contentDis.split('=')[1].trim().replace('"', '');
+        file.name = contentDis.split('=')[1].trim().replace(/"/g, '');
       }
       document.querySelector('#pdfReport').innerHTML = '';
       const object = document.createElement('object');
