@@ -1,16 +1,19 @@
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useAirlineIdentifier = (params) => {
-  return useQuery(['airlineIdentifier', params], () => axios.get(`/airline-identifier/`, { params: params })
-      .then((res) => res.data), {});
-};
+  return useQuery({
+    queryKey: ['airlineIdentifier'],
+    queryFn: () => axios.get(`/airline-identifier/`, { params: params }).then((res) => res.data)});
+}
 
 export const useCreateAirlineIdentifier = () => {
-  return useMutation((values) => axios.post(`/airline-identifier/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.post(`/airline-identifier/`, values).then((res) => res.data),
+    onMutate: () => {
       queryClient.cancelQueries('airlineIdentifier');
     },
     onSettled: () => {
@@ -27,7 +30,9 @@ export const useCreateAirlineIdentifier = () => {
 };
 
 export const useUpdateAirlineIdentifier = () => {
-  return useMutation((values) => axios.put(`/airline-identifier/${values.id}`, values).then((res) => res.data), {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.put(`/airline-identifier/${values.id}`, values).then((res) => res.data),
     onMutate: (values) => {
       queryClient.setQueryData(['airlineIdentifier', values.id], values);
     },
@@ -44,8 +49,10 @@ export const useUpdateAirlineIdentifier = () => {
 };
 
 export const useDeleteAirlineIdentifier = () => {
-  return useMutation((id) => axios.delete(`/airline-identifier/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (id) => axios.delete(`/airline-identifier/${id}`).then((res) => res),
+    onSuccess: () => {
       queryClient.invalidateQueries('airlineIdentifier');
       toast.success('Successfully deleted aircraftCategory.');
     },

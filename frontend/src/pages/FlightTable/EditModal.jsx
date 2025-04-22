@@ -11,7 +11,6 @@ import
   date,
   string,
 } from 'yup';
-import { format } from 'date-fns';
 import mapValues from 'lodash/mapValues';
 import { Paper, Button,
   // createFilterOptions,
@@ -195,7 +194,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             control={control}
             label='Date'
             name="date"
-            defaultValue={!editData ? format(new Date(), 'MM/dd/yyyy') : null}
+            defaultValue={!editData ? DateTime.DATETIME_SHORT : null}
           />
           {/* <AutoComplete
             control={control}

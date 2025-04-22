@@ -1,16 +1,19 @@
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useUser = (params) => {
-  return useQuery(['user', params], () => axios.get(`/user/`, { params: params })
-      .then((res) => res.data), {});
+  return useQuery({
+    queryKey: ['user'],
+    queryFn: () => axios.get(`/user/`, { params: params }).then((res) => res.data)});
 };
 
 export const useCreateUser = () => {
-  return useMutation((values) => axios.post(`/register/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.post(`/register/`, values).then((res) => res.data),
+    onMutate: () => {
       queryClient.cancelQueries('user');
     },
     onSettled: (data) => {
@@ -41,7 +44,9 @@ export const useCreateUser = () => {
 };
 
 export const useUpdateUser = () => {
-  return useMutation((values) => axios.put(`/user/${values.id}`, values).then((res) => res.data), {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.put(`/user/${values.id}`, values).then((res) => res.data),
     onMutate: (values) => {
       queryClient.setQueryData(['user', values.id], values);
     },
@@ -57,9 +62,11 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useDeletePilotType = () => {
-  return useMutation((id) => axios.delete(`/user/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+export const useDeleteUser = () => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (id) => axios.delete(`/user/${id}`).then((res) => res),
+    onSuccess: () => {
       queryClient.invalidateQueries('user');
       toast.success('Successfully deleted user.');
     },

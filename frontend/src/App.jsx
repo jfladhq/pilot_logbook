@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
-import bg from './images/sky.jpg';
+//import bg from './images/sky.jpg';
 import './App.css';
 
 import ChildRoutes from './ChildRoutes';
@@ -12,11 +12,11 @@ import ChildRoutes from './ChildRoutes';
  * @return {Component} App Component
  */
 const App = () => {
-  React.useEffect(() => {
-    document.body.style.backgroundImage = `url('${bg}')`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundRepeat = 'no-repeat';
-  }, []);
+  // React.useEffect(() => {
+  //   document.body.style.backgroundImage = `url('${bg}')`;
+  //   document.body.style.backgroundSize = 'cover';
+  //   document.body.style.backgroundRepeat = 'no-repeat';
+  // }, []);
 
   return (
     <>

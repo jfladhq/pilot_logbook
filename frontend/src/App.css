@@ -1,52 +1,44 @@
-body, html {
-  height: 100%;
-  margin: 0;
+body {
+  background-image: url('/sky.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.App {
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-
-.dropzone {
-  text-align: center;
-  padding: 30px;
-  border: 3px dashed #eeeeee;
-  background-color: #fafafa;
-  color: #bdbdbd;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-.selected-file-wrapper {
-  text-align: center;
-}
-.selected-file {
-  color: #000; 
-  font-weight: bold;
+.card {
+  padding: 2em;
 }

@@ -49,7 +49,7 @@ const Login = () => {
       document.body.style.backgroundRepeat = '';
       document.body.style.backgroundColor = 'white';
     };
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +60,12 @@ const Login = () => {
       formData.append('username', username);
       formData.append('password', password);
       formData.append('rememberMe', rememberMe);
-      axios.post(`/token/`, formData)
+      axios.post(`/token/`, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+        }
+      })
           .then((response) => {
             console.log(response);
             if (response.data.access_token) {

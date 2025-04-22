@@ -12,12 +12,15 @@ router = APIRouter(
     tags=["login"],
 )
 
-@router.get('/me', response_model=User)
-async def get_current_user(db=Depends(get_db)):
-    return db.execute(select(UserModel)).scalars().all()
+# @router.get('/me', response_model=User)
+# async def get_current_user(db=Depends(get_db)):
+#     return db.execute(select(UserModel)).scalars().all()
 
 @router.post('/token', response_model=Token)
-async def login(rememberMe: bool | None = Body(None), changed_password: str | None = Body(None), form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db)):
+async def login(rememberMe: bool | None = Body(None), 
+                changed_password: str | None = Body(None),
+                form_data: OAuth2PasswordRequestForm = Depends(),
+                db=Depends(get_db)):
   username = form_data.username
   password = form_data.password
   user = get_user(db, username=username)
@@ -30,8 +33,8 @@ async def login(rememberMe: bool | None = Body(None), changed_password: str | No
         validate_password(changed_password)
         password_hash = get_password_hash(changed_password)
         db.execute(
-          update(models.User)
-          .where(models.User.idUser == user.idUser)
+          update(UserModel)
+          .where(UserModel.id == user.id)
           .values(password=password_hash, resetPassword=0)
         )
         db.commit()
@@ -40,6 +43,7 @@ async def login(rememberMe: bool | None = Body(None), changed_password: str | No
     else:
       if user.loginAttempts >= user.maxLoginAttempts:
         raise HTTPException(status_code=402, detail="Account locked, too many login attempts.")
+      print(user)
       if not verify_password(password, user.password):
         user.loginAttempts += 1
         db.commit()

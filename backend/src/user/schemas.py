@@ -3,18 +3,18 @@ from schemas.base import Base
 #from src.flight.schemas import FlightBase
 
 class UserBase(Base):
-    id: int
-    admin: bool
     username: str
-    email: str
     firstName: str
     lastName: str
+    email: str
+
+    #flights: List[FlightBase]
+class User(UserBase):
+    id: int
+    admin: bool
     resetPassword: bool
     loginAttempts: int
     maxLoginAttempts: int
-    #flights: List[FlightBase]
-class User(UserBase):
-  pass
 
 class Token(Base):
     access_token: str
@@ -27,9 +27,5 @@ class TokenData(Base):
     scopes: list[str] = []
 
 
-class NewUser(Base):
-    username: str
-    firstName: str
-    lastName: str
+class NewUser(UserBase):
     password: str
-    email: str

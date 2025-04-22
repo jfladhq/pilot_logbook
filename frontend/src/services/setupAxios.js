@@ -1,7 +1,7 @@
 import axios from 'axios';
 const setupAxios = () => {
   // axios.defaults.baseURL = 'http://localhost:9000';
-  axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
   axios.defaults.paramsSerializer = (params) => {

@@ -10,7 +10,7 @@
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/frontend/src",
-      "preLaunchTask": "npm: start"
+      "preLaunchTask": "npm: dev"
     },
     {
       "name": "Python: FastAPI",

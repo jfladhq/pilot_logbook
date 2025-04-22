@@ -1,16 +1,17 @@
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useAircraft = (params) => {
-  return useQuery(['aircraft', params], () => axios.get(`/aircraft/`, { params: params })
-      .then((res) => res.data), {});
+  return useQuery({
+    queryKey: ['aircraft'],
+    queryFn: () => axios.get(`/aircraft/`, { params: params }).then((res) => res.data)});
 };
 
 export const useCreateAircraft = () => {
   return useMutation((values) => axios.post(`/aircraft/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+    onMutate: () => {
       queryClient.cancelQueries('aircraft');
     },
     onSettled: () => {
@@ -45,7 +46,7 @@ export const useUpdateAircraft = () => {
 
 export const useDeleteAircraft = () => {
   return useMutation((id) => axios.delete(`/aircraft/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries('aircraft');
       toast.success('Successfully deleted aircraft.');
     },

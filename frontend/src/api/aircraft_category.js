@@ -1,16 +1,19 @@
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useAircraftCategory = (params) => {
-  return useQuery(['aircraftCategory', params], () => axios.get(`/aircraft-category/`, { params: params })
-      .then((res) => res.data), {});
+  return useQuery({
+    queryKey: ['aircraftCategory'],
+    queryFn: () => axios.get(`/aircraft-category/`, { params: params }).then((res) => res.data)});
 };
 
 export const useCreateAircraftCategory = () => {
-  return useMutation((values) => axios.post(`/aircraft-category/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+  return useMutation({
+    mutationKey: ['aircraftCategory'],
+    mutationFn: (values) => axios.post(`/aircraft-category/`, values).then((res) => res.data),
+    onMutate: () => {
       queryClient.cancelQueries('aircraftCategory');
     },
     onSettled: () => {
@@ -27,7 +30,9 @@ export const useCreateAircraftCategory = () => {
 };
 
 export const useUpdateAircraftCategory = () => {
-  return useMutation((values) => axios.put(`/aircraft-category/${values.id}`, values).then((res) => res.data), {
+  return useMutation({
+    mutationKey: ['aircraftCategory'],
+    mutationFn: (values) => axios.put(`/aircraft-category/${values.id}`, values).then((res) => res.data),
     onMutate: (values) => {
       queryClient.setQueryData(['aircraftCategory', values.id], values);
     },
@@ -44,8 +49,10 @@ export const useUpdateAircraftCategory = () => {
 };
 
 export const useDeleteAircraftCategory = () => {
-  return useMutation((id) => axios.delete(`/aircraft-category/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+  return useMutation({
+    mutationKey: ['aircraftCategory'],
+    mutationFn: (id) => axios.delete(`/aircraft-category/${id}`).then((res) => res), 
+    onSuccess: () => {
       queryClient.invalidateQueries('aircraftCategory');
       toast.success('Successfully deleted aircraftCategory.');
     },

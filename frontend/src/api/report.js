@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useQuery,
   // useMutation
-} from 'react-query';
+} from '@tanstack/react-query';
 // import queryClient from '@services/queryClient';
 // import { toast } from 'react-toastify';
 
 export const useReport = (params) => {
-  return useQuery(['report', params], () => axios.get(`/report/`, { params: params })
-      .then((res) => res.data), {});
+  return useQuery({
+    queryKey: ['report'],
+    queryFn: () => axios.get(`/report/`, { params: params }).then((res) => res.data)});
 };

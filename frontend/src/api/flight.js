@@ -1,15 +1,19 @@
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useFlight = (params) => {
-  return useQuery(['flight', params], () => axios.get(`/flight/`, { params: params }).then((res) => res.data), {});
+  return useQuery({
+    queryKey: ['flight'],
+    queryFn: () => axios.get(`/flight/`, { params: params }).then((res) => res.data)});
 };
 
 export const useCreateFlight = () => {
-  return useMutation((values) => axios.post(`/flight/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+  return useMutation({
+    mutationKey: ['flight'],
+    mutationFn: (values) => axios.post(`/flight/`, values).then((res) => res.data),
+    onMutate: () => {
       queryClient.cancelQueries('flight');
     },
     onSettled: () => {
@@ -26,7 +30,9 @@ export const useCreateFlight = () => {
 };
 
 export const useUpdateFlight = () => {
-  return useMutation((values) => axios.put(`/flight/${values.id}`, values).then((res) => res.data), {
+  return useMutation({
+    mutationKey: ['flight'],
+    mutationFn: (values) => axios.put(`/flight/${values.id}`, values).then((res) => res.data),
     onMutate: (values) => {
       queryClient.setQueryData(['flight', values.id], values);
     },
@@ -36,20 +42,22 @@ export const useUpdateFlight = () => {
       toast.success('Successfully updated flight.');
     },
     onError: (err) => {
-      toast.error('Error updating employee!');
+      toast.error('Error updating flight!');
       throw err;
     },
   });
 };
 
 export const useDeleteFlight = () => {
-  return useMutation((id) => axios.delete(`/flight/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+  return useMutation({
+    mutationKey: ['flight'],
+    mutationFn: (id) => axios.delete(`/flight/${id}`).then((res) => res),
+    onSuccess: () => {
       queryClient.invalidateQueries('flight');
       toast.success('Successfully deleted flight.');
     },
     onError: (err) => {
-      toast.error('Error deleting employee!');
+      toast.error('Error deleting flight!');
       throw err;
     },
   });

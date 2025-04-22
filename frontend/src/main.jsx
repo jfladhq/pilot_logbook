@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './services/reportWebVitals';
 import setupAxios from './services/setupAxios';
 import { ToastContainer } from 'react-toastify';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 setupAxios();

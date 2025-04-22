@@ -4,8 +4,9 @@
         "es2021": true
     },
     "extends": [
+        "eslint:recommended",
         "plugin:react/recommended",
-        "google"
+        "plugin:react-hooks/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -15,10 +16,12 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react", "react-hooks"
     ],
     "rules": {
         "object-curly-spacing": [2, "always"],
-        "max-len": [2, 120, 4]
+        "max-len": [2, 120, 4],
+        "react/react-in-jsx-scope": "off"
+
     }
 }

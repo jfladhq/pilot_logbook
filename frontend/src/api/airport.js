@@ -2,19 +2,21 @@ import axios from 'axios';
 import {
   useQuery,
   useMutation,
-} from 'react-query';
+} from '@tanstack/react-query';
 import queryClient from '@services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useAirport = (params) => {
-  return useQuery(['airport', params], () => axios.get(`/airport/`, { params: params })
-      .then((res) => res.data), {});
+  return useQuery({
+    queryKey:['airport'],
+    queryFn: () => axios.get(`/airport/`, { params: params }).then((res) => res.data)});
 };
 
-
 export const useCreateAirport = () => {
-  return useMutation((values) => axios.post(`/airport/`, values).then((res) => res.data), {
-    onMutate: (values) => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.post(`/airport/`, values).then((res) => res.data),
+    onMutate: () => {
       queryClient.cancelQueries('airport');
     },
     onSettled: () => {
@@ -31,7 +33,9 @@ export const useCreateAirport = () => {
 };
 
 export const useUpdateAirport = () => {
-  return useMutation((values) => axios.put(`/airport/${values.id}`, values).then((res) => res.data), {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (values) => axios.put(`/airport/${values.id}`, values).then((res) => res.data),
     onMutate: (values) => {
       queryClient.setQueryData(['airport', values.id], values);
     },
@@ -48,8 +52,10 @@ export const useUpdateAirport = () => {
 };
 
 export const useDeleteAirport = () => {
-  return useMutation((id) => axios.delete(`/airport/${id}`).then((res) => res), {
-    onSuccess: (data, variables) => {
+  return useMutation({
+    mutationKey: ['airport'],
+    mutationFn: (id) => axios.delete(`/airport/${id}`).then((res) => res),
+    onSuccess: () => {
       queryClient.invalidateQueries('airport');
       toast.success('Successfully deleted airport.');
     },

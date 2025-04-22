@@ -21,8 +21,8 @@ function UploadFiles({ title }) {
   const airlineIdentifier = useAirlineIdentifier();
   const [accepted, setAccepted] = React.useState([]);
   const [rejected, setRejected] = React.useState([]);
-  const [name, setName] = React.useState(process.env.REACT_APP_DEFAULT_PILOT ?? '');
-  const [airline, setAirline] = React.useState(process.env.REACT_APP_DEFAULT_AIRLINE ?? null);
+  const [name, setName] = React.useState(import.meta.env.VITE_DEFAULT_PILOT ?? '');
+  const [airline, setAirline] = React.useState(import.meta.env.VITE_DEFAULT_AIRLINE ?? null);
   // const [fileInfos, setFileInfos] = React.useState([]);
 
   const uploadFiles = async () => {
