@@ -3,7 +3,7 @@ import {
   useQuery,
   useMutation,
 } from '@tanstack/react-query';
-import queryClient from '@services/queryClient';
+import queryClient from '../services/queryClient';
 import { toast } from 'react-toastify';
 
 export const useAirport = (params) => {

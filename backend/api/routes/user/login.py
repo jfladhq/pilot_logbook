@@ -42,13 +42,13 @@ async def login(rememberMe: bool | None = Body(None),
         raise HTTPException(status_code=403, detail="Password must be reset.")
     else:
       if user.loginAttempts >= user.maxLoginAttempts:
-        raise HTTPException(status_code=402, detail="Account locked, too many login attempts.")
+        raise HTTPException(status_code=423, detail="Account locked, too many login attempts.")
       print(user)
       if not verify_password(password, user.password):
         user.loginAttempts += 1
         db.commit()
         if user.loginAttempts >= user.maxLoginAttempts:
-          raise HTTPException(status_code=402, detail="Account locked, too many login attempts.")
+          raise HTTPException(status_code=423, detail="Account locked, too many login attempts.")
       if authenticate(db, username, password):
         access_token = create_access_token(data={"sub": username}, expires_delta=expiration)
         print(user)

@@ -10,8 +10,8 @@ const filter = createFilterOptions();
  * @return {JSX}
  */
 function AutoComplete({
-  defaultValue, label, name, data, isLoading, getOptionLabel=null, inputName=null,
-  control=null, width=null, ...props
+  label, name, data, isLoading, inputName=null,
+  control=null, width=null,
 }) {
   const _form = useFormContext();
   // const idValue = React.useState(null);
@@ -23,7 +23,7 @@ function AutoComplete({
     <>
       {isLoading === false ? (
       <Controller
-        render={({ fieldState, formState, helperText, ...innerprops }) => (
+        render={({ ...innerprops }) => (
           <Autocomplete
             {...innerprops}
             value={data.find((o) => {

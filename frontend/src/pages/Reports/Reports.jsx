@@ -9,8 +9,9 @@ import {
   // TextField
 } from '@mui/material';
 // import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
-import { AutoComplete } from '@components';
-import { useReport } from '@api';
+import { AutoComplete } from '@components/Form';
+//import { AutoComplete } from '../../components/AutoComplete';
+import { useReport } from '@api/report';
 // import { Document, Page, pdfjs } from 'react-pdf';
 // import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 /**
@@ -21,6 +22,7 @@ import { useReport } from '@api';
 const Reports = () => {
   // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
   const reports = useReport();
+  console.log('reports', reports.data);
   const [reportName, setReportName] = React.useState(null);
   // const [pdfString, setPdfString] = React.useState('');
   // const [numPages, setNumPages] = useState(null);
@@ -33,7 +35,7 @@ const Reports = () => {
   //   console.log(reportName);
   // }, []);
   const blobToBase64 = (blob) => {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
       reader.readAsDataURL(blob);
@@ -64,7 +66,7 @@ const Reports = () => {
           window.MozBlobBuilder ||
           window.MSBlobBuilder;
         if (e.name == 'TypeError' && window.BlobBuilder) {
-          const bb = new BlobBuilder();
+          const bb = new Blob();
           bb.append(response.data.buffer);
           file.blob = bb.getBlob('application/pdf');
         } else if (e.name == 'InvalidStateError') {

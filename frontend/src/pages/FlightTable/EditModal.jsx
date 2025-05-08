@@ -27,6 +27,7 @@ import
   useUpdateFlight,
 } from '@api';
 import { Modal } from '@components';
+//import { Modal } from '../../components/Modal';
 import { AutoComplete,
   Datepicker, Input, Switcher,
 } from '@components/Form';
@@ -157,7 +158,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
         });
       }
     }
-  }, [editData]);
+  }, [editData, open, reset, setValue, defaultValues]);
 
   const Buttons = () => {
     return (

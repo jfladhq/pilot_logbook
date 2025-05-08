@@ -1,8 +1,8 @@
-body {
+/* body {
   background-image: url('/sky.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-}
+} */
 
 #root {
   max-width: 1280px;

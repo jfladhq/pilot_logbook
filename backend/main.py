@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 from api.routes.api import api_router
 from core.config import settings
@@ -9,21 +9,45 @@ from loguru import logger
 import logging
 import sys
 import uvicorn
+def create_app() -> FastAPI:
+    """
+    Create FastAPI application instance.
+    """
+    app = FastAPI(title=settings.PROJECT_NAME)
+    if settings.SERVER == False:
+        app.debug = True
+    if settings.SERVER == True:
+        app.debug = False
+        app.redoc_url = None
+        app.docs_url = None
 
-app = FastAPI(title=settings.PROJECT_NAME,debug=True)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.all_cors_origins,
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Access-Control-Allow-Origin, Content-Type", "Authorization"],
+        expose_headers=["Content-Disposition"],
+    )
 
-if not settings.DEV: 
-    app.redoc_url = None
-    app.docs_url = None
+    return app
+app = create_app()
+# app = FastAPI(title=settings.PROJECT_NAME)
+# if settings.SERVER == False:
+#     app.debug = True
+# if settings.SERVER == True:
+#     app.debug = False
+#     app.redoc_url = None
+#     app.docs_url = None
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["Content-Disposition"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=settings.all_cors_origins,
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+#     allow_headers=["Access-Control-Allow-Origin, Content-Type", "Authorization"],
+#     expose_headers=["Content-Disposition"],
+# )
 
 app.include_router(api_router)
 
@@ -37,8 +61,7 @@ for uvicorn_logger in loggers:
 
 logging.getLogger("uvicorn").handlers = [InterceptHandler()]
 
-
-logger.configure(handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}])
+logger.configure(handlers=[{"sink": sys.stdout, "level": logging.INFO, "format": format_record}])
 if settings.SERVER == True:
     logger.add(settings.PROJECT_ROOT + "/logs/api.log", rotation="1 day")
 

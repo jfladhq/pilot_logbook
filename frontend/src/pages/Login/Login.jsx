@@ -76,7 +76,8 @@ const Login = () => {
               toast.success(`Welcome, ${response.data.user.firstName}`);
             }
           }).catch((error) => {
-            toast.error('Error logging in!');
+            console.log(error);
+            toast.error(`Error logging in! - ${error.response?.data?.detail || error.message}`);
             throw error;
           });
     }

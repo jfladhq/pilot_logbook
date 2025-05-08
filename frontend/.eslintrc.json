@@ -22,6 +22,5 @@
         "object-curly-spacing": [2, "always"],
         "max-len": [2, 120, 4],
         "react/react-in-jsx-scope": "off"
-
     }
 }

@@ -6,7 +6,7 @@ import Logout from './Logout';
 // import { RequireToken } from '../../Auth';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import AdbIcon from '@mui/icons-material/Adb';
+//import AdbIcon from '@mui/icons-material/Adb';
 
 import {
   AppBar,
@@ -22,10 +22,10 @@ import {
   MenuItem,
   Button,
   Tooltip,
-  Avatar,
+  //Avatar,
   Container,
 } from '@mui/material';
-import Drawer from './Drawer';
+//import Drawer from './Drawer';
 
 // const NavLinks = styled('div')(({ theme }) => ({
 //   marginLeft: theme.spacing(5),
@@ -45,30 +45,30 @@ const NavLink = styled(Link)(() => ({
   },
 }));
 
-const LogoBox = () => {
-  return (
-    <Typography
-      component='a'
-      variant='h6'
-      noWrap
-      href='/home'
-      sx={{
-        flexGrow: 1,
-        mr: 2,
-        display: { xs: 'none', md: 'flex' },
-        fontFamily: 'monospace',
-        fontWeight: 700,
-        letterSpacing: '.3rem',
-        color: 'inherit',
-        textDecoration: 'none',
-      }}>
-      <img height="40px"
-        className="img-responsive"
-        src={HeaderLogo}
-        alt="Header Logo"/>
-      </Typography>
-    )
-  };
+// const LogoBox = () => {
+//   return (
+//     <Typography
+//       component='a'
+//       variant='h6'
+//       noWrap
+//       href='/home'
+//       sx={{
+//         flexGrow: 1,
+//         mr: 2,
+//         display: { xs: 'none', md: 'flex' },
+//         fontFamily: 'monospace',
+//         fontWeight: 700,
+//         letterSpacing: '.3rem',
+//         color: 'inherit',
+//         textDecoration: 'none',
+//       }}>
+//       <img height="40px"
+//         className="img-responsive"
+//         src={HeaderLogo}
+//         alt="Header Logo"/>
+//       </Typography>
+//     )
+//   };
 
 /**
  *

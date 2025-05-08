@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 import { PropTypes } from 'prop-types';
 // import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
 import { TextField, Box, Button, Paper } from '@mui/material';
-
-import { useAirlineIdentifier } from '@api';
-import { AutoComplete } from '@components';
+import { useAirlineIdentifier } from '@api/airline_identifier';
+import { AutoComplete } from '@components/Form';
+// import { AutoComplete } from '../../components/AutoComplete';
 
 import './UploadFiles.css';
 import { fetchUser } from '../../Auth';

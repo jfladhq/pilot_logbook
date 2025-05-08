@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
  * @param {props} props props
  * @return {JSX}
  */
-function Datepicker({ defaultValue, label, control, name, width, ...props }) {
+function Datepicker({ defaultValue, label, control, name, width }) {
   const _form = useFormContext();
 
   if (control === undefined) {

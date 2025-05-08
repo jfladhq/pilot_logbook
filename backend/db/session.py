@@ -1,9 +1,18 @@
 #from fastapi import Depends
 #from sqlmodel import MetaData, Session
 #from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
+#from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from core.config import settings
+from models.aircraft import Aircraft
+#from src.aircraft.models import Aircraft
+from src.airport.models import Airport
+from src.flight.models import Flight
+from src.user.models import User
+from models.aircraft_category import AircraftCategory
+from models.airline_identifier import AirlineIdentifier
+from models.pilot_type import PilotType
+from models.report import Report
 # engine = AsyncEngine(create_engine(
 #     settings.SQLALCHEMY_DATABASE_URI,
 #     future=True,
@@ -22,16 +31,18 @@ from core.config import settings
 # )
 engine = create_engine(
     settings.SQLALCHEMY_DATABASE_URI,
-    future=True,
+    #future=True,
     echo=True,
     connect_args={
         "options": f"-csearch_path={settings.DB_SCHEMA}"
-    }
+    },
+    pool_size=settings.SQLALCHEMY_POOLSIZE,
+    max_overflow=20
     # pool_recycle=3600,
 )
-SessionLocal = sessionmaker(
-    bind=engine, autoflush=False, expire_on_commit=False
-)
+# SessionLocal = sessionmaker(
+#     bind=engine, autoflush=False, expire_on_commit=False
+# )
 
 # async def init_db():
 #     # await database.connect()

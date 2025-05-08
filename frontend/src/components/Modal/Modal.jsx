@@ -50,7 +50,7 @@ BootstrapDialogTitle.propTypes = {
  *
  * @return {Component} CustomizedDialog Component
  */
-function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons, useForm = False, onSubmit=null }) {
+function Modal({ open, handleClose, title, useForm, onSubmit=null }) {
   // const [open, setOpen] = React.useState(false);
 
   // const handleClickOpen = () => {

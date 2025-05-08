@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateTime } from 'luxon';
-import { useDeleteFlight } from '@api';
+import { useDeleteFlight } from '../../api/flight';
 import { Box,
   Button,
   IconButton,
@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 // import { toast } from 'react-toastify';
 
-import { useFlight } from '@api';
+import { useFlight } from '@api/flight';
 import Table from '@components/Table/Table';
 
 import EditModal from './EditModal';
@@ -64,7 +64,7 @@ const FlightTable = () => {
     e.stopPropagation();
     setOpenDelete(true);
   };
-  const onEditClick = (e) => {
+  const onEditClick = () => {
     console.log('OPEN EDIT', openEdit);
     setOpenEdit(true);
     // e.stopPropagation();

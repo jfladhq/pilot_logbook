@@ -10,7 +10,7 @@ import { TextField } from '@mui/material';
  * @param {props} props props
  * @return {JSX}
  */
-function Input({ type, defaultValue, label, name, autoComplete=null, control=null, width=null, ...props }) {
+function Input({ type, defaultValue, label, name, autoComplete=null, control=null, width=null }) {
   const _form = useFormContext();
   if (defaultValue === undefined) {
     if (type === 'number') {

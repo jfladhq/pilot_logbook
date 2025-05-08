@@ -10,7 +10,7 @@ import { Switch, FormControlLabel, FormGroup } from '@mui/material';
  * @param {props} props props
  * @return {JSX}
  */
-function Switcher({ defaultValue, label, control, name, width, ...props }) {
+function Switcher({ defaultValue, label, control, name }) {
   const _form = useFormContext();
 
   if (control === undefined) {
